@@ -15,9 +15,10 @@ public class GemTubeUserService implements UserService{
     @Override
     public RegisterResponse register(RegisterRequest registerRequest) {
         User user = new User();
+        user.setId(registerRequest.getId());
         user.setEmail(registerRequest.getEmail());
         user.setPassword(registerRequest.getPassword());
-        userRepository.save(user);
-        return new RegisterResponse();
+        User savedUser = userRepository.save(user);
+        return new RegisterResponse(savedUser.getId());
     }
 }

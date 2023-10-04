@@ -22,6 +22,7 @@ public class UserServiceTest {
 
         RegisterResponse registerResponse = userService.register(registerRequest);
         assertNotNull(registerResponse);
-//        assertNotNull(registerResponse.getId());
+        assertNotNull(registerResponse.getId());
     }
+
 }

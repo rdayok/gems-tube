@@ -5,8 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RegisterRequest {
-    private Long id;
+public class UserUpdateRequest {
+
     private String email;
     private String password;
 }
