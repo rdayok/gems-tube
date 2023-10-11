@@ -19,7 +19,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Service
 @RequiredArgsConstructor
-public class GemsTubeMailService implements MailService{
+public class BrevoMailService implements MailService{
 
     private final MailConfig mailConfig;
     @Override

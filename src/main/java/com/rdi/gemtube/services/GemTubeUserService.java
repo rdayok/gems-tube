@@ -6,6 +6,7 @@ import com.rdi.gemtube.dto.requests.EmailRequest;
 import com.rdi.gemtube.dto.requests.Recipient;
 import com.rdi.gemtube.dto.requests.RegisterRequest;
 import com.rdi.gemtube.dto.responses.RegisterResponse;
+import com.rdi.gemtube.exceptions.GemTubeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,4 +32,12 @@ public class GemTubeUserService implements UserService{
         mailService.sendMail(emailRequest);
         return new RegisterResponse(savedUser.getId());
     }
+
+    @Override
+    public User getUserById(Long creatorId) throws GemTubeException {
+        return userRepository.findById(creatorId).orElseThrow(
+                () -> new GemTubeException(String.format("user with %d not found", creatorId))
+        );
+    }
+
 }
