@@ -28,4 +28,11 @@ public class Media {
     private User uploader;
     private String url;
     private LocalDateTime createdAt;
+
+
+    // this tells spring that it should set do this operation of setting this field before persisting the object
+    @PrePersist
+    public void setCreatedAt() {
+        this.createdAt = LocalDateTime.now();
+    }
 }
