@@ -1,5 +1,6 @@
 package com.rdi.gemtube.data.models;
 
+import com.rdi.gemtube.enums.Type;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +9,9 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
+import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.AUTO;
 
 @Entity
@@ -27,8 +30,9 @@ public class Media {
     @OneToOne(fetch = FetchType.EAGER)
     private User uploader;
     private String url;
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Comment> comments;
     private LocalDateTime createdAt;
-
 
     // this tells spring that it should set do this operation of setting this field before persisting the object
     @PrePersist

@@ -1,5 +1,6 @@
 package com.rdi.gemtube.dto.requests;
 
+import com.rdi.gemtube.enums.Type;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
