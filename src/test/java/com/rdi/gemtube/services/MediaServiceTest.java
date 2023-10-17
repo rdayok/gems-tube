@@ -1,9 +1,12 @@
 package com.rdi.gemtube.services;
 
+import com.rdi.gemtube.data.models.Media;
 import com.rdi.gemtube.dto.requests.RegisterRequest;
 import com.rdi.gemtube.dto.requests.UploadMediaRequest;
 import com.rdi.gemtube.dto.responses.UploadMediaResponse;
 import com.rdi.gemtube.exceptions.GemTubeException;
+import com.rdi.gemtube.exceptions.MediaNotFoundException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +18,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static com.rdi.gemtube.services.CloudServiceTest.IMAGE_LOCATION;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 public class MediaServiceTest {
@@ -24,6 +29,12 @@ public class MediaServiceTest {
     private MediaService mediaService;
     @Autowired
     private UserService userService;
+    private UploadMediaResponse uploadMediaResponse;
+
+    @BeforeEach
+    public void setUp() {
+
+    }
 
     @Test
     public void testMediaService() throws GemTubeException {
@@ -35,13 +46,19 @@ public class MediaServiceTest {
         uploadMediaRequest.setCreatorId(registerResponse.getId());
         uploadMediaRequest.setDescription("A close up shot of my picture");
         uploadMediaRequest.setTitle("My passport");
-        uploadMediaRequest.setMultipartFile(getTestFile());
-        UploadMediaResponse response = mediaService.upload(uploadMediaRequest);
-        assertThat(response).isNotNull();
+        uploadMediaRequest.setMultipartFile(getTestFile(IMAGE_LOCATION));
+        uploadMediaResponse = mediaService.upload(uploadMediaRequest);
+        assertThat(uploadMediaResponse).isNotNull();
     }
 
-    public static MultipartFile getTestFile() {
-        Path path = Paths.get("C:\\Users\\WEALTHYMAN\\Documents\\REALCODE\\gemtube\\src\\main\\resources\\assets\\darda.jpg");
+    @Test
+    public void testGetMediaById() throws MediaNotFoundException {
+        Media foundMedia = mediaService.getMediaById(uploadMediaResponse.getMediaId());
+        assertNotNull(foundMedia);
+    }
+
+    public static MultipartFile getTestFile(String fileLocation) {
+        Path path = Paths.get(fileLocation);
         try (var inputStream = Files.newInputStream(path)) {
             return new MockMultipartFile("darda-image", inputStream);
         } catch (IOException exception) {
