@@ -5,7 +5,6 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class CreateCommentRequest {
-    private Long commenterId;
-    private String comment;
+public class UpdateCommentRequest {
+    private String text;
 }

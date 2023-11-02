@@ -12,6 +12,4 @@ public interface MediaService {
     UploadMediaResponse upload(UploadMediaRequest uploadMediaRequest) throws GemTubeException;
 
     Media getMediaById(Long mediaId) throws MediaNotFoundException;
-
-    Media save(Media media);
 }

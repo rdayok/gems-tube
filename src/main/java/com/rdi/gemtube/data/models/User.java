@@ -7,7 +7,7 @@ import lombok.Setter;
 import static jakarta.persistence.GenerationType.AUTO;
 
 @Entity
-@Table(name = "USERS")
+@Table(name = "users")
 @Getter
 @Setter
 public class User {

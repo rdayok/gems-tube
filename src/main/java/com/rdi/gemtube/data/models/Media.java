@@ -17,8 +17,6 @@ import static jakarta.persistence.GenerationType.AUTO;
 @Entity
 @Setter
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 public class Media {
 
     @Id
@@ -27,11 +25,10 @@ public class Media {
     private String title;
     private String description;
     // we specified that the fetch type is eager because by default it is lazy and it is not what we want
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private User uploader;
     private String url;
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Comment> comments;
     private LocalDateTime createdAt;
 
     // this tells spring that it should set do this operation of setting this field before persisting the object

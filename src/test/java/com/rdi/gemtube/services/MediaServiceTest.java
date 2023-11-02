@@ -32,12 +32,7 @@ public class MediaServiceTest {
     private UploadMediaResponse uploadMediaResponse;
 
     @BeforeEach
-    public void setUp() {
-
-    }
-
-    @Test
-    public void testMediaService() throws GemTubeException {
+    public void setUp() throws GemTubeException {
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setEmail("dayokr@gmail.com");
         registerRequest.setPassword("iam_zen");
@@ -48,6 +43,11 @@ public class MediaServiceTest {
         uploadMediaRequest.setTitle("My passport");
         uploadMediaRequest.setMultipartFile(getTestFile(IMAGE_LOCATION));
         uploadMediaResponse = mediaService.upload(uploadMediaRequest);
+
+    }
+
+    @Test
+    public void testMediaService()  {
         assertThat(uploadMediaResponse).isNotNull();
     }
 

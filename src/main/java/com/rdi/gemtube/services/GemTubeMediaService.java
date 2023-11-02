@@ -40,10 +40,6 @@ public class GemTubeMediaService implements MediaService{
                 .orElseThrow(() -> new MediaNotFoundException(String.format("The media with id %d is not found", mediaId)));
     }
 
-    @Override
-    public Media save(Media media) {
-        return null;
-    }
 
     private UploadMediaResponse buildUploadMediaResponse(Media media) {
         Media savedMedia = mediaRepository.save(media);

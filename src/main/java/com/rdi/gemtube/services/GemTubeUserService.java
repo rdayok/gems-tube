@@ -6,8 +6,10 @@ import com.rdi.gemtube.dto.requests.EmailRequest;
 import com.rdi.gemtube.dto.requests.Recipient;
 import com.rdi.gemtube.dto.requests.RegisterRequest;
 import com.rdi.gemtube.dto.responses.RegisterResponse;
+import com.rdi.gemtube.dto.responses.UserResponse;
 import com.rdi.gemtube.exceptions.GemTubeException;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +20,7 @@ public class GemTubeUserService implements UserService{
 
     private final UserRepository userRepository;
     private final MailService mailService;
+    private final ModelMapper modelMapper;
     @Override
     public RegisterResponse register(RegisterRequest registerRequest) {
         User user = new User();
@@ -38,6 +41,11 @@ public class GemTubeUserService implements UserService{
         return userRepository.findById(creatorId).orElseThrow(
                 () -> new GemTubeException(String.format("user with %d not found", creatorId))
         );
+    }
+
+    @Override
+    public UserResponse getUser(Long userId) {
+        return null;
     }
 
 }

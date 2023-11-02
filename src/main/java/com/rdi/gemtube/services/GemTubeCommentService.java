@@ -5,13 +5,14 @@ import com.rdi.gemtube.data.models.Media;
 import com.rdi.gemtube.data.models.User;
 import com.rdi.gemtube.data.repositories.CommentRepository;
 import com.rdi.gemtube.dto.requests.CreateCommentRequest;
+import com.rdi.gemtube.dto.requests.UpdateCommentRequest;
+import com.rdi.gemtube.dto.responses.ApiResponse;
 import com.rdi.gemtube.dto.responses.CreateCommentResponse;
 import com.rdi.gemtube.exceptions.GemTubeException;
+import com.rdi.gemtube.exceptions.MediaNotFoundException;
 import lombok.AllArgsConstructor;
-import org.antlr.v4.runtime.misc.LogManager;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -20,33 +21,33 @@ public class GemTubeCommentService implements CommentService{
     private final UserService userService;
     private final MediaService mediaService;
     private final CommentRepository commentRepository;
+    private final ModelMapper modelMapper;
+
+
 
     @Override
-    public CreateCommentResponse createComment(CreateCommentRequest createCommentRequest) throws GemTubeException {
-        User commenter = userService.getUserById(createCommentRequest.getCommenterId());
-        Comment savedComment = buildComment(createCommentRequest, commenter);
-        return buildCreateCommentResponse(createCommentRequest, savedComment);
+    public ApiResponse<?> addComment(Long mediaId, CreateCommentRequest createCommentRequest) throws GemTubeException {
+        Media foundMedia = mediaService.getMediaById(mediaId);
+        Comment comment = modelMapper.map(createCommentRequest, Comment.class);
+        comment.setMedia(foundMedia);
+        comment.setCommenter(userService.getUserById(createCommentRequest.getCommenterId()));
+        commentRepository.save(comment);
+        ApiResponse<?> response = new ApiResponse<>();
+        response.setMessage("comment added successfully");
+        return response;
     }
 
-    private CreateCommentResponse buildCreateCommentResponse(CreateCommentRequest createCommentRequest, Comment savedComment) {
-        Media savedMedia = buildMedia(createCommentRequest, savedComment);
-        CreateCommentResponse createCommentResponse = new CreateCommentResponse();
-        createCommentResponse.setMessage("Comment created successfully");
-        createCommentResponse.setCommentId(savedComment.getId());
-        createCommentResponse.setCommentedMediaId(savedMedia.getId());
-        return createCommentResponse;
+    @Override
+    public ApiResponse<?> updateComment(long mediaId, long commenterId, UpdateCommentRequest updateCommentRequest) {
+        return null;
     }
 
-    private Media buildMedia(CreateCommentRequest createCommentRequest, Comment savedComment) {
-        Media media = mediaService.getMediaById(createCommentRequest.getMediaId());
-        media.setComments(List.of(savedComment));
-        return mediaService.save(media);
-    }
-
-    private Comment buildComment(CreateCommentRequest createCommentRequest, User commenter) {
+    private Comment saveNewComment(CreateCommentRequest createCommentRequest, User commenter, Media mediaCommentedOn) {
         Comment comment = new Comment();
+        comment.setComment(createCommentRequest.getComment());
         comment.setCommenter(commenter);
-        comment.setMessage(createCommentRequest.getMessage());
+        comment.setMedia(mediaCommentedOn);
         return commentRepository.save(comment);
     }
+
 }
