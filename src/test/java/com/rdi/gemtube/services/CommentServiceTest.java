@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @Sql("/db/insert.sql")
@@ -32,9 +33,10 @@ public class CommentServiceTest {
     }
 
     @Test
-    public void testUpdateComment() {
+    public void testUpdateComment() throws GemTubeException {
         UpdateCommentRequest updateCommentRequest = new UpdateCommentRequest();
-        updateCommentRequest.setText("I feel your swag gee");
-        ApiResponse<?> response = commentService.updateComment(200L, 105L, updateCommentRequest);
+        updateCommentRequest.setComment("I feel your swag gee");
+        ApiResponse<?> response = commentService.updateComment(100L, 100L, updateCommentRequest);
+        assertNotNull(response);
     }
 }

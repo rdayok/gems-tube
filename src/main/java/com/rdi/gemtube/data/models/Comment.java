@@ -16,13 +16,14 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User commenter;
     private String comment;
     @ManyToOne(fetch = FetchType.EAGER)
     private Media media;
     private LocalDateTime createdAt;
+    private LocalDateTime updateAt;
 
     @PrePersist
     public void setCreatedAt() {

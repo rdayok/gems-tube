@@ -6,10 +6,11 @@ import com.rdi.gemtube.dto.responses.ApiResponse;
 import com.rdi.gemtube.dto.responses.CreateCommentResponse;
 import com.rdi.gemtube.exceptions.GemTubeException;
 import com.rdi.gemtube.exceptions.MediaNotFoundException;
+import com.rdi.gemtube.exceptions.ResourceNotFoundException;
 
 public interface CommentService {
 
     ApiResponse<?> addComment(Long mediaId, CreateCommentRequest createCommentRequest) throws GemTubeException;
 
-    ApiResponse<?> updateComment(long mediaId, long commenterId, UpdateCommentRequest updateCommentRequest);
+    ApiResponse<?> updateComment(Long commentId, Long commenterId, UpdateCommentRequest updateCommentRequest) throws GemTubeException;
 }

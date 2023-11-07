@@ -18,7 +18,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Sql("/db/insert.sql")
 public class UserControllerTest {
 
     @Autowired
@@ -43,6 +42,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @Sql("/db/insert.sql")
     public void testGetUserById() {
         try {
             mockMvc.perform(get("/api/v1/user/100"))
@@ -52,6 +52,4 @@ public class UserControllerTest {
             exception.printStackTrace();
         }
     }
-
-
 }

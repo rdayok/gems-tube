@@ -7,9 +7,8 @@ import com.rdi.gemtube.data.repositories.CommentRepository;
 import com.rdi.gemtube.dto.requests.CreateCommentRequest;
 import com.rdi.gemtube.dto.requests.UpdateCommentRequest;
 import com.rdi.gemtube.dto.responses.ApiResponse;
-import com.rdi.gemtube.dto.responses.CreateCommentResponse;
 import com.rdi.gemtube.exceptions.GemTubeException;
-import com.rdi.gemtube.exceptions.MediaNotFoundException;
+import com.rdi.gemtube.exceptions.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -38,9 +37,23 @@ public class GemTubeCommentService implements CommentService{
     }
 
     @Override
-    public ApiResponse<?> updateComment(long mediaId, long commenterId, UpdateCommentRequest updateCommentRequest) {
-        return null;
+    public ApiResponse<?> updateComment(
+            Long commentId, Long commenterId, UpdateCommentRequest updateCommentRequest
+    ) throws GemTubeException {
+        var comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        String.format("Comment with id %d not found", commentId)));
+        var originalCommenterId = comment.getCommenter().getId();
+        if (!originalCommenterId.equals(commenterId))
+            throw new GemTubeException("Only comment creator can update comment");
+        comment.setComment(updateCommentRequest.getComment());
+        commentRepository.save(comment);
+
+        ApiResponse<?> response = new ApiResponse<>();
+        response.setMessage("Comment updated successfully");
+        return response;
     }
+
 
     private Comment saveNewComment(CreateCommentRequest createCommentRequest, User commenter, Media mediaCommentedOn) {
         Comment comment = new Comment();

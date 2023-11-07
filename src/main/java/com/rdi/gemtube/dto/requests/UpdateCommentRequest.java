@@ -6,5 +6,5 @@ import lombok.Setter;
 @Setter
 @Getter
 public class UpdateCommentRequest {
-    private String text;
+    private String comment;
 }
